@@ -165,7 +165,7 @@ export default function HostResults() {
             <div className="flex justify-center mb-2">
               {topThree[0] ? <Avatar avatarId={topThree[0].avatar_icon} size="lg" /> : <span className="text-3xl">🏆</span>}
             </div>
-            <p className="text-lg font-bold truncate">{topThree[0]?.nickname || '-'}</p>
+            <p className="text-lg font-bold text-sm leading-tight">{topThree[0]?.nickname || '-'}</p>
             <p className="text-sm text-text-muted">Campeão</p>
           </Card>
         </div>
@@ -322,9 +322,9 @@ export default function HostResults() {
                   <div className={`col-span-1 text-center font-bold ${positionColor}`}>
                     {position}º
                   </div>
-                  <div className="col-span-6 flex items-center gap-3">
+                  <div className="col-span-6 flex items-center gap-2 min-w-0">
                     <Avatar avatarId={p.avatar_icon} size="sm" />
-                    <span className="font-medium truncate">{p.nickname}</span>
+                    <span className="font-medium truncate flex-1 min-w-0">{p.nickname}</span>
                     {isTopThree && (
                       <span className={`text-xs px-2 py-0.5 rounded-full ${
                         position === 1 ? 'bg-warning/20 text-warning' :

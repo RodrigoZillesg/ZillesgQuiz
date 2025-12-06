@@ -221,7 +221,7 @@ export default function PlayerResults() {
                 <div className="w-16 h-16 rounded-full bg-gray-400/20 flex items-center justify-center mb-2 mx-auto">
                   <Avatar avatarId={topThree[1].avatar_icon} size="md" />
                 </div>
-                <p className="font-semibold truncate max-w-20">{topThree[1].nickname}</p>
+                <p className="font-semibold text-sm break-words w-16 text-center">{topThree[1].nickname}</p>
                 <p className="text-sm text-text-muted">{topThree[1].score} pts</p>
                 <div className="w-16 h-12 bg-gray-400/20 rounded-t-lg mt-2 flex items-center justify-center">
                   <span className="text-xl font-bold text-gray-400">2</span>
@@ -235,7 +235,7 @@ export default function PlayerResults() {
                 <div className="w-20 h-20 rounded-full bg-warning/20 flex items-center justify-center mb-2 mx-auto ring-4 ring-warning">
                   <Avatar avatarId={topThree[0].avatar_icon} size="lg" />
                 </div>
-                <p className="font-semibold truncate max-w-24">{topThree[0].nickname}</p>
+                <p className="font-semibold text-sm break-words w-20 text-center">{topThree[0].nickname}</p>
                 <p className="text-sm text-warning">{topThree[0].score} pts</p>
                 <div className="w-20 h-20 bg-warning/20 rounded-t-lg mt-2 flex items-center justify-center">
                   <span className="text-2xl font-bold text-warning">1</span>
@@ -249,7 +249,7 @@ export default function PlayerResults() {
                 <div className="w-14 h-14 rounded-full bg-amber-700/20 flex items-center justify-center mb-2 mx-auto">
                   <Avatar avatarId={topThree[2].avatar_icon} size="sm" />
                 </div>
-                <p className="font-semibold truncate max-w-16">{topThree[2].nickname}</p>
+                <p className="font-semibold text-xs break-words w-14 text-center">{topThree[2].nickname}</p>
                 <p className="text-sm text-text-muted">{topThree[2].score} pts</p>
                 <div className="w-14 h-8 bg-amber-700/20 rounded-t-lg mt-2 flex items-center justify-center">
                   <span className="text-lg font-bold text-amber-700">3</span>
@@ -293,9 +293,9 @@ export default function PlayerResults() {
                   <div className={`col-span-2 text-center font-bold ${positionColor}`}>
                     {position}º
                   </div>
-                  <div className="col-span-6 flex items-center gap-2">
+                  <div className="col-span-6 flex items-center gap-2 min-w-0">
                     <Avatar avatarId={p.avatar_icon} size="sm" />
-                    <span className="font-medium truncate text-sm">{p.nickname}</span>
+                    <span className="font-medium truncate text-sm flex-1 min-w-0">{p.nickname}</span>
                     {isCurrentPlayer && (
                       <span className="text-xs text-primary">(você)</span>
                     )}
