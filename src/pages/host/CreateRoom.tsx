@@ -4,7 +4,7 @@ import { ArrowLeft, Clock, Users, Zap, Trophy, Eye, HelpCircle } from 'lucide-re
 import { Button, Card, Input } from '../../components/ui'
 import { useAuth } from '../../contexts/AuthContext'
 import { supabase } from '../../lib/supabase'
-import { generateRoomCode, avatarEmojis } from '../../lib/utils'
+import { generateRoomCode, avatars, getAvatarsByCategory, type Avatar } from '../../lib/utils'
 import type { RoomSettings } from '../../types'
 
 interface CategoryInfo {
@@ -20,7 +20,8 @@ export default function CreateRoom() {
 
   // Host também é jogador
   const [hostNickname, setHostNickname] = useState('')
-  const [hostAvatar, setHostAvatar] = useState(avatarEmojis[0])
+  const [hostAvatar, setHostAvatar] = useState(avatars[0].id)
+  const [avatarCategory, setAvatarCategory] = useState<Avatar['category']>('female')
 
   // Seleção de categoria e perguntas
   const [categories, setCategories] = useState<CategoryInfo[]>([])
@@ -397,19 +398,40 @@ export default function CreateRoom() {
               <label className="block text-sm font-medium text-text-secondary mb-3">
                 Escolha seu Avatar
               </label>
-              <div className="grid grid-cols-8 gap-2">
-                {avatarEmojis.map((emoji) => (
+              {/* Categoria de avatares */}
+              <div className="flex gap-2 mb-4 flex-wrap">
+                {(['female', 'male', 'animals', 'hobbies'] as const).map((cat) => (
                   <button
-                    key={emoji}
+                    key={cat}
                     type="button"
-                    onClick={() => setHostAvatar(emoji)}
-                    className={`text-2xl p-2 rounded-xl transition-colors ${
-                      hostAvatar === emoji
-                        ? 'bg-primary/20 ring-2 ring-primary'
+                    onClick={() => setAvatarCategory(cat)}
+                    className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
+                      avatarCategory === cat
+                        ? 'bg-secondary text-white'
                         : 'bg-white/5 hover:bg-white/10'
                     }`}
                   >
-                    {emoji}
+                    {cat === 'female' && 'Feminino'}
+                    {cat === 'male' && 'Masculino'}
+                    {cat === 'animals' && 'Animais'}
+                    {cat === 'hobbies' && 'Hobbies'}
+                  </button>
+                ))}
+              </div>
+              {/* Grid de avatares */}
+              <div className="grid grid-cols-5 gap-2">
+                {getAvatarsByCategory(avatarCategory).map((avatar) => (
+                  <button
+                    key={avatar.id}
+                    type="button"
+                    onClick={() => setHostAvatar(avatar.id)}
+                    className={`aspect-square rounded-xl overflow-hidden transition-all ${
+                      hostAvatar === avatar.id
+                        ? 'ring-2 ring-primary ring-offset-2 ring-offset-background scale-105'
+                        : 'hover:scale-105 opacity-80 hover:opacity-100'
+                    }`}
+                  >
+                    <img src={avatar.src} alt={avatar.id} className="w-full h-full object-cover" />
                   </button>
                 ))}
               </div>

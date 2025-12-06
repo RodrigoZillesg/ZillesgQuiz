@@ -1,0 +1,213 @@
+{
+  "generated": "2025-12-06T12:02:47.062Z",
+  "avatars": {
+    "female": [
+      {
+        "id": "f01",
+        "filename": "f01.png",
+        "description": "young woman with short curly black hair, dark skin, confident smile, wearing casual hoodie"
+      },
+      {
+        "id": "f02",
+        "filename": "f02.png",
+        "description": "middle-aged asian woman with long straight hair, glasses, professional blazer, warm expression"
+      },
+      {
+        "id": "f03",
+        "filename": "f03.png",
+        "description": "young latina woman with wavy brown hair, hoop earrings, colorful top, joyful expression"
+      },
+      {
+        "id": "f04",
+        "filename": "f04.png",
+        "description": "elderly woman with grey hair in bun, light skin, pearl necklace, kind grandmother smile"
+      },
+      {
+        "id": "f05",
+        "filename": "f05.png",
+        "description": "young woman with hijab in teal color, middle eastern features, friendly smile"
+      },
+      {
+        "id": "f06",
+        "filename": "f06.png",
+        "description": "athletic woman with ponytail, mixed race, sporty headband, determined look"
+      },
+      {
+        "id": "f07",
+        "filename": "f07.png",
+        "description": "young woman with bright dyed pink hair, piercings, edgy style, playful expression"
+      },
+      {
+        "id": "f08",
+        "filename": "f08.png",
+        "description": "indian woman with long black hair, traditional bindi, elegant sari, serene smile"
+      },
+      {
+        "id": "f09",
+        "filename": "f09.png",
+        "description": "young redhead woman with freckles, green eyes, casual sweater, friendly grin"
+      },
+      {
+        "id": "f10",
+        "filename": "f10.png",
+        "description": "african woman with beautiful afro hairstyle, bold lipstick, artistic jewelry, proud expression"
+      }
+    ],
+    "male": [
+      {
+        "id": "m01",
+        "filename": "m01.png",
+        "description": "young black man with fade haircut, beard, casual streetwear, cool confident look"
+      },
+      {
+        "id": "m02",
+        "filename": "m02.png",
+        "description": "middle-aged white man with salt and pepper hair, business casual, friendly dad smile"
+      },
+      {
+        "id": "m03",
+        "filename": "m03.png",
+        "description": "young asian man with modern hairstyle, K-pop inspired look, stylish outfit"
+      },
+      {
+        "id": "m04",
+        "filename": "m04.png",
+        "description": "latino man with mustache, warm brown skin, colorful shirt, cheerful expression"
+      },
+      {
+        "id": "m05",
+        "filename": "m05.png",
+        "description": "elderly man with white beard, glasses, wise grandfather look, gentle smile"
+      },
+      {
+        "id": "m06",
+        "filename": "m06.png",
+        "description": "young middle eastern man with short beard, traditional kufi cap, kind eyes"
+      },
+      {
+        "id": "m07",
+        "filename": "m07.png",
+        "description": "athletic man with shaved head, muscular build, tank top, motivated expression"
+      },
+      {
+        "id": "m08",
+        "filename": "m08.png",
+        "description": "indian man with turban (sikh), full beard, warm smile, dignified presence"
+      },
+      {
+        "id": "m09",
+        "filename": "m09.png",
+        "description": "young man with long hair in man bun, hipster beard, artistic vibe, relaxed smile"
+      },
+      {
+        "id": "m10",
+        "filename": "m10.png",
+        "description": "nerdy young man with glasses, messy hair, gaming headphones, excited gamer look"
+      }
+    ],
+    "animals": [
+      {
+        "id": "a01",
+        "filename": "a01.png",
+        "description": "cute fox with orange fur, fluffy tail, clever expression, forest animal"
+      },
+      {
+        "id": "a02",
+        "filename": "a02.png",
+        "description": "wise owl with big round eyes, brown feathers, scholarly look"
+      },
+      {
+        "id": "a03",
+        "filename": "a03.png",
+        "description": "playful golden retriever dog, happy tongue out, friendly pet"
+      },
+      {
+        "id": "a04",
+        "filename": "a04.png",
+        "description": "cool cat with sunglasses, grey fur, confident feline attitude"
+      },
+      {
+        "id": "a05",
+        "filename": "a05.png",
+        "description": "majestic lion with golden mane, proud king of jungle expression"
+      },
+      {
+        "id": "a06",
+        "filename": "a06.png",
+        "description": "cute panda eating bamboo, black and white fur, adorable expression"
+      },
+      {
+        "id": "a07",
+        "filename": "a07.png",
+        "description": "colorful parrot with rainbow feathers, tropical bird, chatty look"
+      },
+      {
+        "id": "a08",
+        "filename": "a08.png",
+        "description": "mystical wolf with blue eyes, grey fur, mysterious forest creature"
+      },
+      {
+        "id": "a09",
+        "filename": "a09.png",
+        "description": "friendly dolphin jumping, ocean creature, playful and smart"
+      },
+      {
+        "id": "a10",
+        "filename": "a10.png",
+        "description": "cute koala on tree branch, fluffy ears, sleepy adorable expression"
+      }
+    ],
+    "hobbies": [
+      {
+        "id": "h01",
+        "filename": "h01.png",
+        "description": "electric guitar with flames design, rock music instrument, energetic vibe"
+      },
+      {
+        "id": "h02",
+        "filename": "h02.png",
+        "description": "gaming controller with glowing buttons, esports theme, competitive gaming"
+      },
+      {
+        "id": "h03",
+        "filename": "h03.png",
+        "description": "artist palette with paint brushes, creative colorful art supplies"
+      },
+      {
+        "id": "h04",
+        "filename": "h04.png",
+        "description": "soccer ball with dynamic motion lines, sports theme, active lifestyle"
+      },
+      {
+        "id": "h05",
+        "filename": "h05.png",
+        "description": "telescope pointing at stars, astronomy hobby, space exploration theme"
+      },
+      {
+        "id": "h06",
+        "filename": "h06.png",
+        "description": "chef hat with cooking utensils, culinary arts, foodie theme"
+      },
+      {
+        "id": "h07",
+        "filename": "h07.png",
+        "description": "vintage camera with flash, photography hobby, creative capture"
+      },
+      {
+        "id": "h08",
+        "filename": "h08.png",
+        "description": "open book with magical sparkles, reading and fantasy literature"
+      },
+      {
+        "id": "h09",
+        "filename": "h09.png",
+        "description": "skateboard with graffiti design, street sports, urban culture"
+      },
+      {
+        "id": "h10",
+        "filename": "h10.png",
+        "description": "headphones with music notes floating, DJ and music lover theme"
+      }
+    ]
+  }
+}

@@ -84,13 +84,77 @@ export function calculateTotalScore(
 }
 
 /**
- * Lista de emojis disponíveis para avatares
+ * Avatar personalizado com imagem Low Poly 3D
  */
-export const avatarEmojis = [
-  '😀', '😎', '🤓', '🥳', '🤩', '😺', '🦊', '🐼',
-  '🦁', '🐯', '🐸', '🐙', '🦄', '🐲', '👻', '🤖',
-  '👽', '🎃', '💀', '🦇', '🦋', '🐝', '🌟', '🔥'
+export interface Avatar {
+  id: string
+  src: string
+  category: 'female' | 'male' | 'animals' | 'hobbies'
+}
+
+/**
+ * Lista de avatares disponíveis (imagens Low Poly 3D)
+ */
+export const avatars: Avatar[] = [
+  // Feminino
+  { id: 'f01', src: '/avatars/f01.png', category: 'female' },
+  { id: 'f02', src: '/avatars/f02.png', category: 'female' },
+  { id: 'f03', src: '/avatars/f03.png', category: 'female' },
+  { id: 'f04', src: '/avatars/f04.png', category: 'female' },
+  { id: 'f05', src: '/avatars/f05.png', category: 'female' },
+  { id: 'f06', src: '/avatars/f06.png', category: 'female' },
+  { id: 'f07', src: '/avatars/f07.png', category: 'female' },
+  { id: 'f08', src: '/avatars/f08.png', category: 'female' },
+  { id: 'f09', src: '/avatars/f09.png', category: 'female' },
+  { id: 'f10', src: '/avatars/f10.png', category: 'female' },
+  // Masculino
+  { id: 'm01', src: '/avatars/m01.png', category: 'male' },
+  { id: 'm02', src: '/avatars/m02.png', category: 'male' },
+  { id: 'm03', src: '/avatars/m03.png', category: 'male' },
+  { id: 'm04', src: '/avatars/m04.png', category: 'male' },
+  { id: 'm05', src: '/avatars/m05.png', category: 'male' },
+  { id: 'm06', src: '/avatars/m06.png', category: 'male' },
+  { id: 'm07', src: '/avatars/m07.png', category: 'male' },
+  { id: 'm08', src: '/avatars/m08.png', category: 'male' },
+  { id: 'm09', src: '/avatars/m09.png', category: 'male' },
+  { id: 'm10', src: '/avatars/m10.png', category: 'male' },
+  // Animais
+  { id: 'a01', src: '/avatars/a01.png', category: 'animals' },
+  { id: 'a02', src: '/avatars/a02.png', category: 'animals' },
+  { id: 'a03', src: '/avatars/a03.png', category: 'animals' },
+  { id: 'a04', src: '/avatars/a04.png', category: 'animals' },
+  { id: 'a05', src: '/avatars/a05.png', category: 'animals' },
+  { id: 'a06', src: '/avatars/a06.png', category: 'animals' },
+  { id: 'a07', src: '/avatars/a07.png', category: 'animals' },
+  { id: 'a08', src: '/avatars/a08.png', category: 'animals' },
+  { id: 'a09', src: '/avatars/a09.png', category: 'animals' },
+  { id: 'a10', src: '/avatars/a10.png', category: 'animals' },
+  // Hobbies
+  { id: 'h01', src: '/avatars/h01.png', category: 'hobbies' },
+  { id: 'h02', src: '/avatars/h02.png', category: 'hobbies' },
+  { id: 'h03', src: '/avatars/h03.png', category: 'hobbies' },
+  { id: 'h04', src: '/avatars/h04.png', category: 'hobbies' },
+  { id: 'h05', src: '/avatars/h05.png', category: 'hobbies' },
+  { id: 'h06', src: '/avatars/h06.png', category: 'hobbies' },
+  { id: 'h07', src: '/avatars/h07.png', category: 'hobbies' },
+  { id: 'h08', src: '/avatars/h08.png', category: 'hobbies' },
+  { id: 'h09', src: '/avatars/h09.png', category: 'hobbies' },
+  { id: 'h10', src: '/avatars/h10.png', category: 'hobbies' },
 ]
+
+/**
+ * Obtém avatar por ID
+ */
+export function getAvatarById(id: string): Avatar | undefined {
+  return avatars.find(a => a.id === id)
+}
+
+/**
+ * Obtém avatares por categoria
+ */
+export function getAvatarsByCategory(category: Avatar['category']): Avatar[] {
+  return avatars.filter(a => a.category === category)
+}
 
 /**
  * Formata tempo em segundos para MM:SS

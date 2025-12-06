@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { Zap, RefreshCw } from 'lucide-react'
 import { Button, Input, Card } from '../../components/ui'
 import { supabase } from '../../lib/supabase'
-import { avatarEmojis } from '../../lib/utils'
+import { avatars, getAvatarsByCategory, getAvatarById, type Avatar } from '../../lib/utils'
 import { useAuth } from '../../contexts/AuthContext'
 import { getPlayerSession, savePlayerSession, clearPlayerSession, type PlayerSession } from '../../lib/session'
 import type { Room } from '../../types'
@@ -15,7 +15,8 @@ export default function JoinRoom() {
 
   const [room, setRoom] = useState<Room | null>(null)
   const [nickname, setNickname] = useState('')
-  const [avatar, setAvatar] = useState(avatarEmojis[0])
+  const [avatar, setAvatar] = useState(avatars[0].id)
+  const [avatarCategory, setAvatarCategory] = useState<Avatar['category']>('female')
   const [team, setTeam] = useState<'red' | 'blue' | null>(null)
   const [loading, setLoading] = useState(true)
   const [joining, setJoining] = useState(false)
@@ -192,10 +193,17 @@ export default function JoinRoom() {
 
   // Mostrar opção de reconexão se houver sessão salva
   if (savedSession && room) {
+    const savedAvatarData = getAvatarById(savedSession.avatarIcon)
     return (
       <div className="min-h-screen flex items-center justify-center p-4">
         <Card className="w-full max-w-md text-center">
-          <div className="text-6xl mb-4">{savedSession.avatarIcon}</div>
+          <div className="w-24 h-24 mx-auto mb-4 rounded-full overflow-hidden">
+            {savedAvatarData ? (
+              <img src={savedAvatarData.src} alt="Avatar" className="w-full h-full object-cover" />
+            ) : (
+              <div className="text-6xl">{savedSession.avatarIcon}</div>
+            )}
+          </div>
           <h1 className="text-2xl font-bold mb-2">Bem-vindo de volta!</h1>
           <p className="text-text-muted mb-6">
             Você estava na sala como <strong>{savedSession.nickname}</strong>
@@ -268,19 +276,40 @@ export default function JoinRoom() {
             <label className="block text-sm font-medium text-text-secondary mb-3">
               Escolha seu Avatar
             </label>
-            <div className="grid grid-cols-8 gap-2">
-              {avatarEmojis.map((emoji) => (
+            {/* Categoria de avatares */}
+            <div className="flex gap-2 mb-4 flex-wrap">
+              {(['female', 'male', 'animals', 'hobbies'] as const).map((cat) => (
                 <button
-                  key={emoji}
+                  key={cat}
                   type="button"
-                  onClick={() => setAvatar(emoji)}
-                  className={`text-2xl p-2 rounded-xl transition-colors ${
-                    avatar === emoji
-                      ? 'bg-primary/20 ring-2 ring-primary'
+                  onClick={() => setAvatarCategory(cat)}
+                  className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
+                    avatarCategory === cat
+                      ? 'bg-secondary text-white'
                       : 'bg-white/5 hover:bg-white/10'
                   }`}
                 >
-                  {emoji}
+                  {cat === 'female' && 'Feminino'}
+                  {cat === 'male' && 'Masculino'}
+                  {cat === 'animals' && 'Animais'}
+                  {cat === 'hobbies' && 'Hobbies'}
+                </button>
+              ))}
+            </div>
+            {/* Grid de avatares */}
+            <div className="grid grid-cols-5 gap-2">
+              {getAvatarsByCategory(avatarCategory).map((avatarItem) => (
+                <button
+                  key={avatarItem.id}
+                  type="button"
+                  onClick={() => setAvatar(avatarItem.id)}
+                  className={`aspect-square rounded-xl overflow-hidden transition-all ${
+                    avatar === avatarItem.id
+                      ? 'ring-2 ring-primary ring-offset-2 ring-offset-background scale-105'
+                      : 'hover:scale-105 opacity-80 hover:opacity-100'
+                  }`}
+                >
+                  <img src={avatarItem.src} alt={avatarItem.id} className="w-full h-full object-cover" />
                 </button>
               ))}
             </div>
