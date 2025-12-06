@@ -2,7 +2,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { QRCodeSVG } from 'qrcode.react'
 import { Users, Play, Copy, Check, Settings, ListChecks } from 'lucide-react'
 import { useState } from 'react'
-import { Button, Card } from '../../components/ui'
+import { Button, Card, Avatar } from '../../components/ui'
 import { useRoom } from '../../hooks/useRoom'
 import { useAuth } from '../../contexts/AuthContext'
 import { useToast } from '../../contexts/ToastContext'
@@ -90,24 +90,30 @@ export default function RoomLobby() {
               {code}
             </h1>
           </div>
-          <div className="flex gap-3">
-            <Button variant="ghost" onClick={handleCopyLink}>
+          <div className="flex flex-wrap gap-2 md:gap-3">
+            <Button variant="ghost" size="sm" onClick={handleCopyLink} className="text-xs md:text-sm">
               {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-              {copied ? 'Copiado!' : 'Copiar Link'}
+              <span className="hidden sm:inline">{copied ? 'Copiado!' : 'Copiar Link'}</span>
+              <span className="sm:hidden">{copied ? 'Copiado' : 'Link'}</span>
             </Button>
             <Button
               variant="secondary"
+              size="sm"
               onClick={() => navigate(`/host/room/${code}/questions`)}
+              className="text-xs md:text-sm"
             >
               <ListChecks className="w-4 h-4" />
-              Perguntas ({roomQuestionCount})
+              <span className="hidden sm:inline">Perguntas ({roomQuestionCount})</span>
+              <span className="sm:hidden">({roomQuestionCount})</span>
             </Button>
             <Button
               onClick={handleStartGame}
+              size="sm"
               disabled={participants.length === 0}
+              className="text-xs md:text-sm"
             >
               <Play className="w-4 h-4" />
-              Iniciar Jogo
+              Iniciar
             </Button>
           </div>
         </div>
@@ -177,8 +183,8 @@ export default function RoomLobby() {
                         key={p.id}
                         className="flex items-center gap-2 bg-white/5 rounded-lg px-3 py-2"
                       >
-                        <span className="text-xl">{p.avatar_icon}</span>
-                        <span>{p.nickname}</span>
+                        <Avatar avatarId={p.avatar_icon} size="sm" />
+                        <span className="truncate">{p.nickname}</span>
                       </div>
                     ))}
                     {teamRed.length === 0 && (
@@ -198,8 +204,8 @@ export default function RoomLobby() {
                         key={p.id}
                         className="flex items-center gap-2 bg-white/5 rounded-lg px-3 py-2"
                       >
-                        <span className="text-xl">{p.avatar_icon}</span>
-                        <span>{p.nickname}</span>
+                        <Avatar avatarId={p.avatar_icon} size="sm" />
+                        <span className="truncate">{p.nickname}</span>
                       </div>
                     ))}
                     {teamBlue.length === 0 && (
@@ -214,10 +220,10 @@ export default function RoomLobby() {
                 {soloPlayers.map((p) => (
                   <div
                     key={p.id}
-                    className="flex items-center gap-2 bg-white/5 rounded-xl px-4 py-3"
+                    className="flex items-center gap-2 bg-white/5 rounded-xl px-3 py-2"
                   >
-                    <span className="text-2xl">{p.avatar_icon}</span>
-                    <span className="truncate">{p.nickname}</span>
+                    <Avatar avatarId={p.avatar_icon} size="sm" />
+                    <span className="truncate text-sm">{p.nickname}</span>
                   </div>
                 ))}
               </div>

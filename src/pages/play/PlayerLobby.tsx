@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { Loader2, Users } from 'lucide-react'
-import { Card } from '../../components/ui'
+import { Card, Avatar } from '../../components/ui'
 import { useRoom } from '../../hooks/useRoom'
 import { useAuth } from '../../contexts/AuthContext'
 import { supabase } from '../../lib/supabase'
@@ -165,7 +165,7 @@ export default function PlayerLobby() {
 
           {currentParticipant && (
             <div className="inline-flex items-center gap-2 bg-white/5 rounded-full px-4 py-2">
-              <span className="text-2xl">{currentParticipant.avatar_icon}</span>
+              <Avatar avatarId={currentParticipant.avatar_icon} size="sm" />
               <span className="font-semibold">{currentParticipant.nickname}</span>
               {currentParticipant.team && (
                 <span
@@ -219,8 +219,8 @@ export default function PlayerLobby() {
                           : 'bg-white/5'
                       }`}
                     >
-                      <span className="text-xl">{p.avatar_icon}</span>
-                      <span>{p.nickname}</span>
+                      <Avatar avatarId={p.avatar_icon} size="sm" />
+                      <span className="truncate">{p.nickname}</span>
                       {p.id === currentParticipant?.id && (
                         <span className="text-xs text-text-muted">(você)</span>
                       )}
@@ -244,8 +244,8 @@ export default function PlayerLobby() {
                           : 'bg-white/5'
                       }`}
                     >
-                      <span className="text-xl">{p.avatar_icon}</span>
-                      <span>{p.nickname}</span>
+                      <Avatar avatarId={p.avatar_icon} size="sm" />
+                      <span className="truncate">{p.nickname}</span>
                       {p.id === currentParticipant?.id && (
                         <span className="text-xs text-text-muted">(você)</span>
                       )}
@@ -259,15 +259,15 @@ export default function PlayerLobby() {
               {participants.map((p) => (
                 <div
                   key={p.id}
-                  className={`flex items-center gap-2 rounded-xl px-4 py-3 ${
+                  className={`flex items-center gap-2 rounded-xl px-3 py-2 ${
                     p.id === currentParticipant?.id
                       ? 'bg-primary/20 ring-1 ring-primary'
                       : 'bg-white/5'
                   }`}
                 >
-                  <span className="text-2xl">{p.avatar_icon}</span>
-                  <div className="min-w-0">
-                    <span className="block truncate">{p.nickname}</span>
+                  <Avatar avatarId={p.avatar_icon} size="sm" />
+                  <div className="min-w-0 flex-1">
+                    <span className="block truncate text-sm">{p.nickname}</span>
                     {p.id === currentParticipant?.id && (
                       <span className="text-xs text-text-muted">(você)</span>
                     )}
