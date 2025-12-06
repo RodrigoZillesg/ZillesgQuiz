@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { Trophy, Medal, Home, Loader2, Users } from 'lucide-react'
-import { Card, Button } from '../../components/ui'
+import { Card, Button, Avatar } from '../../components/ui'
 import { supabase } from '../../lib/supabase'
 import { useAuth } from '../../contexts/AuthContext'
 import { clearPlayerSession } from '../../lib/session'
@@ -160,7 +160,7 @@ export default function PlayerResults() {
         {currentParticipant && (
           <Card className="mb-6 text-center bg-primary/10 border border-primary/20">
             <div className="flex items-center justify-center gap-3 mb-2">
-              <span className="text-4xl">{currentParticipant.avatar_icon}</span>
+              <Avatar avatarId={currentParticipant.avatar_icon} size="lg" />
               <div>
                 <p className="text-lg font-semibold">{currentParticipant.nickname}</p>
                 <p className="text-text-muted">Você</p>
@@ -218,8 +218,8 @@ export default function PlayerResults() {
             {/* 2º lugar */}
             {topThree[1] && (
               <div className="text-center">
-                <div className="w-16 h-16 rounded-full bg-gray-400/20 flex items-center justify-center text-3xl mb-2 mx-auto">
-                  {topThree[1].avatar_icon}
+                <div className="w-16 h-16 rounded-full bg-gray-400/20 flex items-center justify-center mb-2 mx-auto">
+                  <Avatar avatarId={topThree[1].avatar_icon} size="md" />
                 </div>
                 <p className="font-semibold truncate max-w-20">{topThree[1].nickname}</p>
                 <p className="text-sm text-text-muted">{topThree[1].score} pts</p>
@@ -232,8 +232,8 @@ export default function PlayerResults() {
             {/* 1º lugar */}
             {topThree[0] && (
               <div className="text-center">
-                <div className="w-20 h-20 rounded-full bg-warning/20 flex items-center justify-center text-4xl mb-2 mx-auto ring-4 ring-warning">
-                  {topThree[0].avatar_icon}
+                <div className="w-20 h-20 rounded-full bg-warning/20 flex items-center justify-center mb-2 mx-auto ring-4 ring-warning">
+                  <Avatar avatarId={topThree[0].avatar_icon} size="lg" />
                 </div>
                 <p className="font-semibold truncate max-w-24">{topThree[0].nickname}</p>
                 <p className="text-sm text-warning">{topThree[0].score} pts</p>
@@ -246,8 +246,8 @@ export default function PlayerResults() {
             {/* 3º lugar */}
             {topThree[2] && (
               <div className="text-center">
-                <div className="w-14 h-14 rounded-full bg-amber-700/20 flex items-center justify-center text-2xl mb-2 mx-auto">
-                  {topThree[2].avatar_icon}
+                <div className="w-14 h-14 rounded-full bg-amber-700/20 flex items-center justify-center mb-2 mx-auto">
+                  <Avatar avatarId={topThree[2].avatar_icon} size="sm" />
                 </div>
                 <p className="font-semibold truncate max-w-16">{topThree[2].nickname}</p>
                 <p className="text-sm text-text-muted">{topThree[2].score} pts</p>
@@ -294,7 +294,7 @@ export default function PlayerResults() {
                     {position}º
                   </div>
                   <div className="col-span-6 flex items-center gap-2">
-                    <span className="text-xl">{p.avatar_icon}</span>
+                    <Avatar avatarId={p.avatar_icon} size="sm" />
                     <span className="font-medium truncate text-sm">{p.nickname}</span>
                     {isCurrentPlayer && (
                       <span className="text-xs text-primary">(você)</span>

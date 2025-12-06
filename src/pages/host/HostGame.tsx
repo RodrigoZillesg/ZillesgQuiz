@@ -4,7 +4,7 @@ import {
   Loader2, Clock, Users, SkipForward, StopCircle,
   Trophy, CheckCircle, XCircle, BarChart3, Flame, Zap, Home
 } from 'lucide-react'
-import { Card, Button } from '../../components/ui'
+import { Card, Button, Avatar } from '../../components/ui'
 import { GameProvider, useGame } from '../../contexts/GameContext'
 import { supabase } from '../../lib/supabase'
 import { playCountdownTick, playCountdownGo, playTimeTick, playNewQuestion, initAudio } from '../../lib/sounds'
@@ -546,7 +546,7 @@ function HostGameContent() {
                     <div className="space-y-1">
                       {participants.filter(p => p.team === 'red').slice(0, 3).map(p => (
                         <div key={p.id} className="flex items-center gap-2 text-sm">
-                          <span>{p.avatar_icon}</span>
+                          <Avatar avatarId={p.avatar_icon} size="sm" />
                           <span className="truncate flex-1">{p.nickname}</span>
                           {p.streak >= 2 && (
                             <div className="flex items-center gap-0.5 text-warning">
@@ -570,7 +570,7 @@ function HostGameContent() {
                     <div className="space-y-1">
                       {participants.filter(p => p.team === 'blue').slice(0, 3).map(p => (
                         <div key={p.id} className="flex items-center gap-2 text-sm">
-                          <span>{p.avatar_icon}</span>
+                          <Avatar avatarId={p.avatar_icon} size="sm" />
                           <span className="truncate flex-1">{p.nickname}</span>
                           {p.streak >= 2 && (
                             <div className="flex items-center gap-0.5 text-warning">
@@ -602,7 +602,7 @@ function HostGameContent() {
                       }`}>
                         {index + 1}
                       </span>
-                      <span className="text-lg">{p.avatar_icon}</span>
+                      <Avatar avatarId={p.avatar_icon} size="sm" />
                       <span className="flex-1 truncate">{p.nickname}</span>
                       {p.streak >= 2 && (
                         <div className="flex items-center gap-1 text-warning">

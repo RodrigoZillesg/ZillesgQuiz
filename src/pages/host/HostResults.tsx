@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { Trophy, Medal, Home, Loader2, RotateCcw, Users } from 'lucide-react'
-import { Card, Button } from '../../components/ui'
+import { Card, Button, Avatar } from '../../components/ui'
 import { supabase } from '../../lib/supabase'
 import { playVictory, initAudio } from '../../lib/sounds'
 import confetti from 'canvas-confetti'
@@ -162,7 +162,9 @@ export default function HostResults() {
             <p className="text-sm text-text-muted">Pontos Totais</p>
           </Card>
           <Card className="text-center">
-            <p className="text-3xl mb-2">{topThree[0]?.avatar_icon || '🏆'}</p>
+            <div className="flex justify-center mb-2">
+              {topThree[0] ? <Avatar avatarId={topThree[0].avatar_icon} size="lg" /> : <span className="text-3xl">🏆</span>}
+            </div>
             <p className="text-lg font-bold truncate">{topThree[0]?.nickname || '-'}</p>
             <p className="text-sm text-text-muted">Campeão</p>
           </Card>
@@ -222,8 +224,8 @@ export default function HostResults() {
               {/* 2º lugar */}
               {topThree[1] && (
                 <div className="text-center">
-                  <div className="w-20 h-20 rounded-full bg-gray-400/20 flex items-center justify-center text-4xl mb-3 mx-auto">
-                    {topThree[1].avatar_icon}
+                  <div className="w-20 h-20 rounded-full bg-gray-400/20 flex items-center justify-center mb-3 mx-auto">
+                    <Avatar avatarId={topThree[1].avatar_icon} size="lg" />
                   </div>
                   <p className="font-semibold text-lg">{topThree[1].nickname}</p>
                   <p className="text-text-muted">{topThree[1].score} pts</p>
@@ -243,8 +245,8 @@ export default function HostResults() {
               {/* 1º lugar */}
               {topThree[0] && (
                 <div className="text-center">
-                  <div className="w-24 h-24 rounded-full bg-warning/20 flex items-center justify-center text-5xl mb-3 mx-auto ring-4 ring-warning">
-                    {topThree[0].avatar_icon}
+                  <div className="w-24 h-24 rounded-full bg-warning/20 flex items-center justify-center mb-3 mx-auto ring-4 ring-warning">
+                    <Avatar avatarId={topThree[0].avatar_icon} size="xl" />
                   </div>
                   <p className="font-semibold text-xl">{topThree[0].nickname}</p>
                   <p className="text-warning font-bold">{topThree[0].score} pts</p>
@@ -264,8 +266,8 @@ export default function HostResults() {
               {/* 3º lugar */}
               {topThree[2] && (
                 <div className="text-center">
-                  <div className="w-16 h-16 rounded-full bg-amber-700/20 flex items-center justify-center text-3xl mb-3 mx-auto">
-                    {topThree[2].avatar_icon}
+                  <div className="w-16 h-16 rounded-full bg-amber-700/20 flex items-center justify-center mb-3 mx-auto">
+                    <Avatar avatarId={topThree[2].avatar_icon} size="md" />
                   </div>
                   <p className="font-semibold">{topThree[2].nickname}</p>
                   <p className="text-text-muted">{topThree[2].score} pts</p>
@@ -321,7 +323,7 @@ export default function HostResults() {
                     {position}º
                   </div>
                   <div className="col-span-6 flex items-center gap-3">
-                    <span className="text-2xl">{p.avatar_icon}</span>
+                    <Avatar avatarId={p.avatar_icon} size="sm" />
                     <span className="font-medium truncate">{p.nickname}</span>
                     {isTopThree && (
                       <span className={`text-xs px-2 py-0.5 rounded-full ${
