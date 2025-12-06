@@ -43,6 +43,14 @@ Estilo "Modern Flat Vibrant" com Dark Mode:
 - Fontes: Poppins (títulos), Inter (UI)
 - Bordas: `rounded-xl` ou `rounded-2xl`
 
+## Avatares
+
+Sistema de avatares Low Poly 3D gerados via DALL-E 3:
+- 40 avatares em 4 categorias: Feminino (f01-f10), Masculino (m01-m10), Animais (a01-a10), Hobbies (h01-h10)
+- Arquivos em `public/avatars/*.png`
+- Componente `Avatar` em `src/components/ui/Avatar.tsx` com fallback para emojis legados
+- Utilitários em `src/lib/utils.ts`: `getAvatarById()`, `getAvatarsByCategory()`
+
 ## Regras de Negócio
 
 - Pontuação: Fácil 100pts | Médio 200pts | Difícil 300pts
@@ -54,32 +62,66 @@ Estilo "Modern Flat Vibrant" com Dark Mode:
 Credenciais estão no arquivo `.env` (não commitado). Ver `.env.example` para estrutura:
 - `VITE_SUPABASE_URL` - URL do projeto Supabase
 - `VITE_SUPABASE_ANON_KEY` - Chave anônima do Supabase
-- `OPENAI_API_KEY` - Chave da API OpenAI (para Edge Functions)
+- `OPENAI_API_KEY` - Chave da API OpenAI (para Edge Functions e geração de avatares)
+
+---
 
 ## Deploy
 
-Quando o usuário pedir "faça um deploy" ou similar, seguir o processo documentado em `DEPLOY.md`.
+**IMPORTANTE:** Quando o usuário pedir "faça um deploy", "deploy", "publicar" ou similar, seguir EXATAMENTE o processo documentado em `DEPLOY.md`.
+
+### Arquitetura de Produção
+
+```
+Internet → Traefik (Easypanel) → quiz_quiz (Docker container nginx:alpine) → /var/www/ZillesgQuiz/dist
+```
+
+O servidor usa:
+- **Easypanel** com Docker Swarm
+- **Traefik** como reverse proxy (SSL automático via Let's Encrypt)
+- **Container nginx:alpine** servindo arquivos estáticos
+- Configuração Traefik em `/etc/easypanel/traefik/config/quiz.yaml`
 
 ### Deploy Rápido (atualização de código)
+
 ```bash
+# 1. Commit e push local
+git push
+
+# 2. Executar no servidor
 ssh root@103.199.187.87 "cd /var/www/ZillesgQuiz && git pull && npm run build"
 ```
 
 ### Informações do Servidor
-- **IP:** 103.199.187.87
-- **SSH:** `ssh root@103.199.187.87`
-- **Domínio:** quiz.zillesg.tech
-- **URL Produção:** https://quiz.zillesg.tech
-- **Diretório:** /var/www/ZillesgQuiz
+
+| Item | Valor |
+|------|-------|
+| **IP** | 103.199.187.87 |
+| **SSH** | `ssh root@103.199.187.87` |
+| **Domínio** | quiz.zillesg.tech |
+| **URL Produção** | https://quiz.zillesg.tech |
+| **Diretório** | /var/www/ZillesgQuiz |
+| **Serviço Docker** | quiz_quiz |
 
 ### Pré-requisitos para Deploy
+
 1. Código deve estar commitado e pushado para o GitHub
 2. Build local deve funcionar sem erros (`npm run build`)
 
-### Observações
-- O servidor usa Traefik (via Easypanel) para SSL automático
-- Nginx serve os arquivos estáticos na porta 8080
-- Se o Easypanel sobrescrever a config do Traefik, executar o script Python documentado em DEPLOY.md
+### Troubleshooting Rápido
+
+Se o site mostrar 404 do Easypanel após deploy:
+```bash
+# Verificar se o serviço está rodando
+ssh root@103.199.187.87 "docker service ls | grep quiz"
+
+# Verificar se a config do Traefik existe
+ssh root@103.199.187.87 "cat /etc/easypanel/traefik/config/quiz.yaml"
+```
+
+Se a config não existir, recriar conforme documentado em `DEPLOY.md` seção "Deploy Inicial", passo 8.
+
+---
 
 ## Idioma
 

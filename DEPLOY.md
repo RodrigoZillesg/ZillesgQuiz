@@ -12,30 +12,71 @@ Este documento descreve o processo completo de deploy do Quiz Battle para o serv
 | **OS** | Ubuntu 24.04.1 LTS |
 | **Domínio** | quiz.zillesg.tech |
 | **URL Produção** | https://quiz.zillesg.tech |
+| **Painel** | Easypanel (Docker Swarm) |
 
 ## Arquitetura
 
 ```
 Internet (HTTPS:443)
        ↓
-   Traefik (Docker Swarm)
+   Traefik (Docker Swarm - Easypanel)
        ↓ SSL automático (Let's Encrypt)
-   Nginx (porta 8080)
+   quiz_quiz (container nginx:alpine)
        ↓
-   /var/www/ZillesgQuiz/dist (arquivos estáticos)
+   /var/www/ZillesgQuiz/dist (volume montado)
 ```
 
 ## Estrutura no Servidor
 
 ```
-/var/www/ZillesgQuiz/          # Projeto clonado do GitHub
-├── .env                        # Variáveis de ambiente (Supabase)
-├── dist/                       # Build de produção (gerado por npm run build)
-├── node_modules/               # Dependências
+/var/www/ZillesgQuiz/              # Projeto clonado do GitHub
+├── dist/                          # Build de produção (gerado por npm run build)
+├── nginx.conf                     # Configuração do Nginx para o container
+├── docker-stack.yml               # Stack definition para Docker Swarm
+├── node_modules/                  # Dependências
 └── ...
 
-/etc/nginx/sites-available/quizbattle   # Configuração Nginx
-/etc/easypanel/traefik/config/main.yaml # Configuração Traefik (inclui rotas do quiz)
+/etc/easypanel/traefik/config/
+├── main.yaml                      # Configuração principal do Traefik (gerenciado pelo Easypanel)
+└── quiz.yaml                      # Configuração de rotas do Quiz (arquivo separado)
+```
+
+## Docker Stack
+
+O Quiz roda como um serviço Docker Swarm:
+
+```bash
+# Ver serviço
+docker service ls | grep quiz
+
+# Ver logs
+docker service logs quiz_quiz --tail 50 -f
+
+# Reiniciar serviço (se necessário)
+docker service update --force quiz_quiz
+```
+
+---
+
+## Deploy de Atualização (Rotina)
+
+### Passo 1: Commit e Push local
+```bash
+git add .
+git commit -m "sua mensagem"
+git push
+```
+
+### Passo 2: Executar deploy no servidor
+```bash
+ssh root@103.199.187.87 "cd /var/www/ZillesgQuiz && git pull && npm run build"
+```
+
+> **Nota:** Não é necessário reiniciar o container. Os arquivos estáticos são montados como volume e atualizados automaticamente.
+
+### Comando único (Git + Deploy)
+```bash
+git push && ssh root@103.199.187.87 "cd /var/www/ZillesgQuiz && git pull && npm run build"
 ```
 
 ---
@@ -47,15 +88,10 @@ Internet (HTTPS:443)
 ssh root@103.199.187.87
 ```
 
-### 2. Instalar dependências do sistema
+### 2. Instalar Node.js
 ```bash
-# Node.js 20
 curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
 apt install -y nodejs
-
-# Nginx
-DEBIAN_FRONTEND=noninteractive apt install -y nginx
-systemctl enable nginx
 ```
 
 ### 3. Clonar repositório
@@ -80,153 +116,170 @@ npm install
 npm run build
 ```
 
-### 6. Configurar Nginx
+### 6. Criar configuração Nginx para o container
 ```bash
-cat > /etc/nginx/sites-available/quizbattle << 'EOF'
+cat > /var/www/ZillesgQuiz/nginx.conf << 'EOF'
 server {
-    listen 8080;
-    server_name _;
-
-    root /var/www/ZillesgQuiz/dist;
+    listen 80;
+    server_name localhost;
+    root /usr/share/nginx/html;
     index index.html;
 
     location / {
         try_files $uri $uri/ /index.html;
     }
 
-    location ~* \.(js|css|png|jpg|jpeg|gif|ico|svg|woff|woff2)$ {
+    location ~* \.(js|css|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot)$ {
         expires 1y;
         add_header Cache-Control "public, immutable";
     }
-
-    gzip on;
-    gzip_types text/plain text/css application/json application/javascript text/xml application/xml application/xml+rss text/javascript;
 }
 EOF
-
-ln -sf /etc/nginx/sites-available/quizbattle /etc/nginx/sites-enabled/
-rm -f /etc/nginx/sites-enabled/default
-nginx -t && systemctl restart nginx
 ```
 
-### 7. Liberar firewall
+### 7. Criar Docker Stack
 ```bash
-ufw allow 8080/tcp
+cat > /var/www/ZillesgQuiz/docker-stack.yml << 'EOF'
+version: '3.8'
+
+services:
+  quiz:
+    image: nginx:alpine
+    volumes:
+      - /var/www/ZillesgQuiz/dist:/usr/share/nginx/html:ro
+      - /var/www/ZillesgQuiz/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    networks:
+      - easypanel
+    deploy:
+      labels:
+        - traefik.enable=true
+        - traefik.http.routers.quiz-http.rule=Host(`quiz.zillesg.tech`)
+        - traefik.http.routers.quiz-http.entrypoints=http
+        - traefik.http.routers.quiz-http.middlewares=redirect-to-https
+        - traefik.http.routers.quiz-https.rule=Host(`quiz.zillesg.tech`)
+        - traefik.http.routers.quiz-https.entrypoints=https
+        - traefik.http.routers.quiz-https.tls=true
+        - traefik.http.routers.quiz-https.tls.certresolver=letsencrypt
+        - traefik.http.services.quiz.loadbalancer.server.port=80
+
+networks:
+  easypanel:
+    external: true
+EOF
 ```
 
-### 8. Configurar Traefik (rotas e SSL)
+### 8. Criar configuração Traefik (arquivo separado)
 ```bash
-python3 << "PYEOF"
-import json
-
-with open("/etc/easypanel/traefik/config/main.yaml", "r") as f:
-    config = json.load(f)
-
-config["http"]["routers"]["http-quiz"] = {
-    "service": "quiz",
-    "rule": "Host(`quiz.zillesg.tech`)",
-    "priority": 10,
-    "middlewares": ["redirect-to-https", "bad-gateway-error-page"],
-    "entryPoints": ["http"]
-}
-
-config["http"]["routers"]["https-quiz"] = {
-    "service": "quiz",
-    "rule": "Host(`quiz.zillesg.tech`)",
-    "priority": 10,
-    "middlewares": ["bad-gateway-error-page"],
-    "tls": {
-        "certResolver": "letsencrypt",
-        "domains": [{"main": "quiz.zillesg.tech"}]
-    },
-    "entryPoints": ["https"]
-}
-
-config["http"]["services"]["quiz"] = {
-    "loadBalancer": {
-        "servers": [{"url": "http://172.17.0.1:8080/"}],
-        "passHostHeader": True
-    }
-}
-
-with open("/etc/easypanel/traefik/config/main.yaml", "w") as f:
-    json.dump(config, f, indent=2)
-
-print("Traefik configurado com sucesso!")
-PYEOF
+cat > /etc/easypanel/traefik/config/quiz.yaml << 'EOF'
+http:
+  routers:
+    http-quiz:
+      service: quiz
+      rule: "Host(`quiz.zillesg.tech`)"
+      entryPoints:
+        - http
+      middlewares:
+        - redirect-to-https
+    https-quiz:
+      service: quiz
+      rule: "Host(`quiz.zillesg.tech`)"
+      entryPoints:
+        - https
+      tls:
+        certResolver: letsencrypt
+      middlewares:
+        - bad-gateway-error-page
+  services:
+    quiz:
+      loadBalancer:
+        servers:
+          - url: "http://quiz_quiz:80/"
+        passHostHeader: true
+EOF
 ```
 
----
-
-## Deploy de Atualização (Rotina)
-
-Quando houver alterações no código, execute estes comandos:
-
-### Via SSH direto:
+### 9. Deploy do Stack
 ```bash
-ssh root@103.199.187.87 "cd /var/www/ZillesgQuiz && git pull && npm run build"
+docker stack deploy -c /var/www/ZillesgQuiz/docker-stack.yml quiz
 ```
 
-### Ou passo a passo:
+### 10. Verificar se está rodando
 ```bash
-ssh root@103.199.187.87
-cd /var/www/ZillesgQuiz
-git pull
-npm run build
+docker service ls | grep quiz
+# Deve mostrar: quiz_quiz   replicated   1/1   nginx:alpine
 ```
-
-> **Nota:** Não é necessário reiniciar o Nginx para mudanças de código, pois são apenas arquivos estáticos.
 
 ---
 
 ## Troubleshooting
 
-### Site não carrega (502 Bad Gateway)
-1. Verificar se Nginx está rodando:
+### Site mostra 404 do Easypanel
+O Traefik não está roteando para o serviço. Verificar:
+
+1. Se o serviço está rodando:
    ```bash
-   systemctl status nginx
+   docker service ls | grep quiz
    ```
-2. Verificar se a porta 8080 está escutando:
+
+2. Se o arquivo de config do Traefik existe:
    ```bash
-   ss -tlnp | grep 8080
+   cat /etc/easypanel/traefik/config/quiz.yaml
    ```
-3. Reiniciar Nginx:
-   ```bash
-   systemctl restart nginx
-   ```
+
+3. Se não existir, recriar com o passo 8 do deploy inicial.
+
+### Container não inicia
+```bash
+# Ver logs detalhados
+docker service logs quiz_quiz --tail 100
+
+# Verificar se os volumes existem
+ls -la /var/www/ZillesgQuiz/dist/
+ls -la /var/www/ZillesgQuiz/nginx.conf
+```
 
 ### SSL não funciona
-1. Verificar rotas do Traefik:
+Traefik gera certificados automaticamente. Se não funcionar:
+
+1. Verificar logs do Traefik:
    ```bash
-   cat /etc/easypanel/traefik/config/main.yaml | python3 -c "import json,sys; d=json.load(sys.stdin); print('Quiz routers:', [k for k in d['http']['routers'] if 'quiz' in k])"
+   docker service logs traefik --tail 100 | grep quiz
    ```
-2. Se as rotas sumiram, executar novamente o script Python do passo 8.
+
+2. Verificar se o DNS aponta corretamente:
+   ```bash
+   nslookup quiz.zillesg.tech
+   ```
 
 ### Build falha com erros TypeScript
-1. Verificar erros localmente primeiro:
+1. Corrigir erros localmente primeiro:
    ```bash
    npm run build
    ```
-2. Corrigir erros e fazer push para o GitHub antes do deploy.
+2. Fazer push e tentar novamente.
 
-### Easypanel sobrescreveu a configuração do Traefik
-Executar novamente o script Python do passo 8 para readicionar as rotas do quiz.
+### Easypanel sobrescreveu a config do Traefik
+O arquivo `quiz.yaml` é separado do `main.yaml`, então não deveria ser afetado.
+Se acontecer, recriar com o passo 8.
 
 ---
 
 ## Comandos Úteis
 
 ```bash
-# Ver logs do Nginx
-journalctl -u nginx -f
+# Ver status do serviço
+docker service ls | grep quiz
 
-# Ver logs do Traefik
-docker service logs traefik --tail 100 -f
+# Ver logs em tempo real
+docker service logs quiz_quiz -f --tail 50
 
-# Testar configuração do Nginx
-nginx -t
+# Reiniciar serviço (força redeployment)
+docker service update --force quiz_quiz
 
-# Ver status dos serviços Docker
+# Ver configuração do Traefik
+cat /etc/easypanel/traefik/config/quiz.yaml
+
+# Ver todos os serviços Docker Swarm
 docker service ls
 
 # Verificar espaço em disco
@@ -234,6 +287,9 @@ df -h
 
 # Verificar uso de memória
 free -h
+
+# Ver IP do container
+docker inspect $(docker ps -q -f name=quiz_quiz) --format '{{.NetworkSettings.Networks}}'
 ```
 
 ---
@@ -242,7 +298,6 @@ free -h
 
 - [ ] Código commitado e pushado para GitHub
 - [ ] Build local funcionando (`npm run build`)
-- [ ] SSH no servidor
-- [ ] `git pull` executado
-- [ ] `npm run build` executado sem erros
-- [ ] Site acessível em https://quiz.zillesg.tech
+- [ ] Executar: `ssh root@103.199.187.87 "cd /var/www/ZillesgQuiz && git pull && npm run build"`
+- [ ] Verificar site em https://quiz.zillesg.tech
+- [ ] Se 404, verificar serviço: `docker service ls | grep quiz`
