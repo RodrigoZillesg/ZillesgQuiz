@@ -3,9 +3,10 @@ import type { ReactNode } from 'react'
 interface CardProps {
   children: ReactNode
   className?: string
+  onClick?: () => void
 }
 
-export function Card({ children, className = '' }: CardProps) {
+export function Card({ children, className = '', onClick }: CardProps) {
   return (
     <div
       className={`
@@ -13,6 +14,7 @@ export function Card({ children, className = '' }: CardProps) {
         rounded-2xl p-6
         ${className}
       `}
+      onClick={onClick}
     >
       {children}
     </div>

@@ -65,7 +65,7 @@ export default function SelectQuestions() {
   }, [code])
 
   // Categorias únicas
-  const categories = [...new Set(questions.map(q => q.category))].filter(Boolean)
+  const categories = [...new Set(questions.map(q => q.category))].filter((c): c is string => Boolean(c))
 
   // Filtrar perguntas
   const filteredQuestions = questions.filter(q => {

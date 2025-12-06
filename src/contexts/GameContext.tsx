@@ -113,22 +113,6 @@ export function GameProvider({ children }: { children: ReactNode }) {
     return parsed
   }, [])
 
-  // Calcular tempo restante baseado no timestamp do servidor
-  const calculateTimeLeft = useCallback(() => {
-    if (!questionStartedAtRef.current) return 0
-
-    const startedAt = parseTimestamp(questionStartedAtRef.current)
-    if (startedAt === 0) return 0
-
-    const elapsedMs = Date.now() - startedAt
-    const elapsedSeconds = Math.floor(elapsedMs / 1000)
-    const remaining = timeLimitRef.current - elapsedSeconds
-
-    // Limitar ao time_limit (caso relógio do cliente esteja atrasado)
-    // e garantir mínimo de 0
-    return Math.max(0, Math.min(timeLimitRef.current, remaining))
-  }, [parseTimestamp])
-
   // Iniciar timer baseado em timestamp do servidor
   const startServerTimer = useCallback((questionStartedAt: string, timeLimit: number) => {
     // Limpar timer anterior

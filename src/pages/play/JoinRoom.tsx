@@ -6,12 +6,12 @@ import { supabase } from '../../lib/supabase'
 import { avatarEmojis } from '../../lib/utils'
 import { useAuth } from '../../contexts/AuthContext'
 import { getPlayerSession, savePlayerSession, clearPlayerSession, type PlayerSession } from '../../lib/session'
-import type { Room, Participant } from '../../types'
+import type { Room } from '../../types'
 
 export default function JoinRoom() {
   const { code } = useParams<{ code: string }>()
   const navigate = useNavigate()
-  const { user, signInAnonymously } = useAuth()
+  const { user } = useAuth()
 
   const [room, setRoom] = useState<Room | null>(null)
   const [nickname, setNickname] = useState('')
