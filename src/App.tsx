@@ -18,6 +18,7 @@ import ManageQuestions from './pages/host/ManageQuestions'
 import QuestionReports from './pages/host/QuestionReports'
 import HostGame from './pages/host/HostGame'
 import HostResults from './pages/host/HostResults'
+import Profile from './pages/host/Profile'
 
 // Pages - Player
 import JoinRoom from './pages/play/JoinRoom'
@@ -80,6 +81,14 @@ function App() {
           element={
             <ProtectedRoute requireHost>
               <HostResults />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/host/profile"
+          element={
+            <ProtectedRoute requireHost>
+              <Profile />
             </ProtectedRoute>
           }
         />

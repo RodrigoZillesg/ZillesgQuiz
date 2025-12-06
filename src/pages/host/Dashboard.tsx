@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { Plus, List, LogOut, Shield, Flag } from 'lucide-react'
+import { Plus, List, LogOut, Shield, Flag, UserCircle } from 'lucide-react'
 import { Button, Card } from '../../components/ui'
 import { useAuth } from '../../contexts/AuthContext'
 import { supabase } from '../../lib/supabase'
@@ -34,10 +34,18 @@ export default function HostDashboard() {
       <div className="max-w-4xl mx-auto">
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-3xl font-bold font-heading">Painel do Host</h1>
-          <Button variant="ghost" onClick={handleSignOut}>
-            <LogOut className="w-4 h-4" />
-            Sair
-          </Button>
+          <div className="flex items-center gap-2">
+            <Link to="/host/profile">
+              <Button variant="ghost">
+                <UserCircle className="w-4 h-4" />
+                Meu Perfil
+              </Button>
+            </Link>
+            <Button variant="ghost" onClick={handleSignOut}>
+              <LogOut className="w-4 h-4" />
+              Sair
+            </Button>
+          </div>
         </div>
 
         <div className="flex items-center gap-3 mb-8">
