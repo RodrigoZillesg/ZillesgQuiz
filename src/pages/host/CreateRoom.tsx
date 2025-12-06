@@ -339,8 +339,8 @@ export default function CreateRoom() {
                         : 'bg-white/5 hover:bg-white/10'
                     }`}
                   >
-                    <div className="font-medium truncate">{cat.category}</div>
-                    <div className="text-sm opacity-70">{cat.total} perguntas</div>
+                    <div className="font-medium text-sm leading-tight">{cat.category}</div>
+                    <div className="text-xs opacity-70">{cat.total} perguntas</div>
                   </button>
                 ))}
               </div>

@@ -477,48 +477,48 @@ function HostGameContent() {
             </Card>
 
             {/* Controles */}
-            <Card className="flex items-center justify-between">
-              <div className="flex items-center gap-4">
-                <div className={`flex items-center gap-2 ${
+            <Card className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+              <div className="flex items-center gap-2">
+                <div className={`flex items-center gap-2 text-sm ${
                   currentAnswersCount >= participants.length && participants.length > 0
                     ? 'text-success'
                     : 'text-text-muted'
                 }`}>
-                  <Users className="w-5 h-5" />
+                  <Users className="w-5 h-5 flex-shrink-0" />
                   <span>
                     {currentAnswersCount} / {participants.length} respostas
                     {currentAnswersCount >= participants.length && participants.length > 0 && (
-                      <span className="ml-2 text-success">✓ Todos responderam!</span>
+                      <span className="ml-2 text-success">✓</span>
                     )}
                   </span>
                 </div>
               </div>
 
-              <div className="flex gap-3">
+              <div className="flex flex-wrap gap-2">
                 {!showAnswer && timeLeft > 0 && !allAnswered && (
-                  <Button variant="ghost" onClick={() => setShowAnswer(true)}>
-                    Revelar Resposta
+                  <Button variant="ghost" size="sm" onClick={() => setShowAnswer(true)}>
+                    Revelar
                   </Button>
                 )}
 
                 {(showAnswer || timeLeft === 0 || allAnswered) ? (
                   <>
                     {currentQuestionIndex < questions.length - 1 ? (
-                      <Button onClick={handleNextQuestion}>
-                        <SkipForward className="w-5 h-5" />
-                        Próxima Pergunta
+                      <Button size="sm" onClick={handleNextQuestion}>
+                        <SkipForward className="w-4 h-4" />
+                        Próxima
                       </Button>
                     ) : (
-                      <Button onClick={handleEndGame}>
-                        <Trophy className="w-5 h-5" />
-                        Ver Resultados
+                      <Button size="sm" onClick={handleEndGame}>
+                        <Trophy className="w-4 h-4" />
+                        Resultados
                       </Button>
                     )}
                   </>
                 ) : null}
 
-                <Button variant="ghost" onClick={handleEndGame} className="text-error hover:bg-error/10">
-                  <StopCircle className="w-5 h-5" />
+                <Button variant="ghost" size="sm" onClick={handleEndGame} className="text-error hover:bg-error/10">
+                  <StopCircle className="w-4 h-4" />
                   Encerrar
                 </Button>
               </div>

@@ -255,7 +255,7 @@ export default function PlayerLobby() {
               </div>
             </div>
           ) : (
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+            <div className="flex flex-wrap gap-2">
               {participants.map((p) => (
                 <div
                   key={p.id}
@@ -266,12 +266,10 @@ export default function PlayerLobby() {
                   }`}
                 >
                   <Avatar avatarId={p.avatar_icon} size="sm" />
-                  <div className="min-w-0 flex-1">
-                    <span className="block truncate text-sm">{p.nickname}</span>
-                    {p.id === currentParticipant?.id && (
-                      <span className="text-xs text-text-muted">(você)</span>
-                    )}
-                  </div>
+                  <span className="text-sm">{p.nickname}</span>
+                  {p.id === currentParticipant?.id && (
+                    <span className="text-xs text-text-muted">(você)</span>
+                  )}
                 </div>
               ))}
             </div>
