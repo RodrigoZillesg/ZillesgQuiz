@@ -1,0 +1,261 @@
+@import "tailwindcss";
+
+@theme {
+  /* Design System - Quiz Battle */
+
+  /* Background */
+  --color-background: #0F172A;
+
+  /* Primary - Vibrant Tangerine */
+  --color-primary: #FF6B35;
+  --color-primary-hover: #E55A2B;
+
+  /* Secondary - Electric Cyan */
+  --color-secondary: #00F5D4;
+  --color-secondary-hover: #00D4B8;
+
+  /* Feedback States */
+  --color-success: #22C55E;
+  --color-warning: #F59E0B;
+  --color-error: #EF4444;
+
+  /* Surface */
+  --color-surface: #1E293B;
+
+  /* Text */
+  --color-text-primary: #FFFFFF;
+  --color-text-secondary: #E2E8F0;
+  --color-text-muted: #94A3B8;
+
+  /* Teams */
+  --color-team-red: #EF4444;
+  --color-team-blue: #3B82F6;
+
+  /* Fonts */
+  --font-heading: 'Poppins', sans-serif;
+  --font-body: 'Inter', sans-serif;
+
+  /* Border Radius */
+  --radius-xl: 0.75rem;
+  --radius-2xl: 1rem;
+  --radius-3xl: 1.5rem;
+}
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: var(--font-body);
+    background-color: var(--color-background);
+    color: var(--color-text-primary);
+    margin: 0;
+    min-height: 100vh;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+  }
+
+  /* Custom Select Styling */
+  select {
+    background-color: var(--color-surface);
+    color: var(--color-text-primary);
+  }
+
+  select option {
+    background-color: var(--color-surface);
+    color: var(--color-text-primary);
+    padding: 8px 12px;
+  }
+
+  select option:hover,
+  select option:focus,
+  select option:checked {
+    background-color: var(--color-primary);
+    color: white;
+  }
+}
+
+/* Custom Animations */
+@keyframes scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes pulse-slow {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes shake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-5px);
+  }
+  75% {
+    transform: translateX(5px);
+  }
+}
+
+@keyframes bounce-in {
+  0% {
+    transform: scale(0.3);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  70% {
+    transform: scale(0.9);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes pulse-answer {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.02);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes countdown-pop {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes fire-flicker {
+  0%, 100% {
+    transform: scale(1) rotate(-2deg);
+    filter: brightness(1);
+  }
+  25% {
+    transform: scale(1.1) rotate(2deg);
+    filter: brightness(1.2);
+  }
+  50% {
+    transform: scale(0.95) rotate(-1deg);
+    filter: brightness(0.9);
+  }
+  75% {
+    transform: scale(1.05) rotate(1deg);
+    filter: brightness(1.1);
+  }
+}
+
+@keyframes slide-in-right {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes glow-pulse {
+  0%, 100% {
+    box-shadow: 0 0 5px var(--color-primary), 0 0 10px var(--color-primary);
+  }
+  50% {
+    box-shadow: 0 0 20px var(--color-primary), 0 0 40px var(--color-primary);
+  }
+}
+
+@layer utilities {
+  .animate-fade-in {
+    animation: fade-in 0.2s ease-out;
+  }
+
+  .animate-scale-in {
+    animation: scale-in 0.2s ease-out;
+  }
+
+  .animate-pulse-slow {
+    animation: pulse-slow 3s ease-in-out infinite;
+  }
+
+  .animate-slide-up {
+    animation: slide-up 0.3s ease-out;
+  }
+
+  .animate-shake {
+    animation: shake 0.5s ease-in-out;
+  }
+
+  .animate-bounce-in {
+    animation: bounce-in 0.5s ease-out;
+  }
+
+  .animate-pulse-answer {
+    animation: pulse-answer 0.3s ease-out;
+  }
+
+  .animate-countdown-pop {
+    animation: countdown-pop 0.5s ease-out forwards;
+  }
+
+  .animate-fire-flicker {
+    animation: fire-flicker 0.5s ease-in-out infinite;
+  }
+
+  .animate-slide-in-right {
+    animation: slide-in-right 0.3s ease-out;
+  }
+
+  .animate-glow-pulse {
+    animation: glow-pulse 2s ease-in-out infinite;
+  }
+}
