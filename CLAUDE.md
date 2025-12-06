@@ -56,6 +56,31 @@ Credenciais estão no arquivo `.env` (não commitado). Ver `.env.example` para e
 - `VITE_SUPABASE_ANON_KEY` - Chave anônima do Supabase
 - `OPENAI_API_KEY` - Chave da API OpenAI (para Edge Functions)
 
+## Deploy
+
+Quando o usuário pedir "faça um deploy" ou similar, seguir o processo documentado em `DEPLOY.md`.
+
+### Deploy Rápido (atualização de código)
+```bash
+ssh root@103.199.187.87 "cd /var/www/ZillesgQuiz && git pull && npm run build"
+```
+
+### Informações do Servidor
+- **IP:** 103.199.187.87
+- **SSH:** `ssh root@103.199.187.87`
+- **Domínio:** quiz.zillesg.tech
+- **URL Produção:** https://quiz.zillesg.tech
+- **Diretório:** /var/www/ZillesgQuiz
+
+### Pré-requisitos para Deploy
+1. Código deve estar commitado e pushado para o GitHub
+2. Build local deve funcionar sem erros (`npm run build`)
+
+### Observações
+- O servidor usa Traefik (via Easypanel) para SSL automático
+- Nginx serve os arquivos estáticos na porta 8080
+- Se o Easypanel sobrescrever a config do Traefik, executar o script Python documentado em DEPLOY.md
+
 ## Idioma
 
 Toda comunicação deve ser em Português.
