@@ -1,8 +1,9 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { Zap, ArrowLeft } from 'lucide-react'
+import { ArrowLeft, CheckCircle } from 'lucide-react'
 import { Button, Input, Card } from '../components/ui'
 import { useAuth } from '../contexts/AuthContext'
+import logoQuadrado from '../assets/flasq-quadrado.png'
 
 export default function Register() {
   const [email, setEmail] = useState('')
@@ -52,7 +53,7 @@ export default function Register() {
           <Card>
             <div className="text-center">
               <div className="w-16 h-16 bg-success/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Zap className="w-8 h-8 text-success" />
+                <CheckCircle className="w-8 h-8 text-success" />
               </div>
               <h1 className="text-2xl font-bold font-heading mb-2">Conta criada!</h1>
               <p className="text-text-secondary mb-6">
@@ -80,8 +81,8 @@ export default function Register() {
         </Link>
 
         <Card>
-          <div className="flex items-center justify-center gap-2 mb-6">
-            <Zap className="w-8 h-8 text-primary" />
+          <div className="flex flex-col items-center justify-center gap-3 mb-6">
+            <img src={logoQuadrado} alt="FlasQ" className="w-16 h-16 rounded-xl" />
             <h1 className="text-2xl font-bold font-heading">Criar Conta</h1>
           </div>
 

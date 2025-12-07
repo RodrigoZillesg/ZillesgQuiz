@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { Plus, List, LogOut, Shield, Flag, UserCircle } from 'lucide-react'
+import { Plus, List, LogOut, Shield, Flag, UserCircle, Database } from 'lucide-react'
 import { Button, Card } from '../../components/ui'
 import { useAuth } from '../../contexts/AuthContext'
 import { supabase } from '../../lib/supabase'
+import logoRetangular from '../../assets/flasq-retangular.png'
 
 export default function HostDashboard() {
   const { user, signOut, isAdmin } = useAuth()
@@ -33,7 +34,12 @@ export default function HostDashboard() {
     <div className="min-h-screen p-8">
       <div className="max-w-4xl mx-auto">
         <div className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-bold font-heading">Painel do Host</h1>
+          <div className="flex items-center gap-4">
+            <Link to="/">
+              <img src={logoRetangular} alt="FlasQ" className="h-10 w-auto" />
+            </Link>
+            <h1 className="text-2xl font-bold font-heading text-text-muted">Painel do Host</h1>
+          </div>
           <div className="flex items-center gap-2">
             <Link to="/host/profile">
               <Button variant="ghost">
@@ -85,6 +91,22 @@ export default function HostDashboard() {
                   <div>
                     <h2 className="text-xl font-semibold">Gerenciar Perguntas</h2>
                     <p className="text-text-muted">Banco de perguntas do sistema</p>
+                  </div>
+                </div>
+              </Card>
+            </Link>
+          )}
+
+          {isAdmin && (
+            <Link to="/host/knowledge">
+              <Card className="hover:border-primary/50 transition-colors cursor-pointer h-full">
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 bg-primary/20 rounded-xl flex items-center justify-center">
+                    <Database className="w-6 h-6 text-primary" />
+                  </div>
+                  <div>
+                    <h2 className="text-xl font-semibold">Base de Conhecimento</h2>
+                    <p className="text-text-muted">Importe conteúdo para gerar perguntas</p>
                   </div>
                 </div>
               </Card>

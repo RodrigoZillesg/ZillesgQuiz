@@ -3,7 +3,7 @@
  * Permite reconexão após refresh/desconexão
  */
 
-const SESSION_KEY = 'quiz_battle_session'
+const SESSION_KEY = 'flasq_session'
 
 export interface PlayerSession {
   roomCode: string

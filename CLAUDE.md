@@ -4,7 +4,14 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Projeto
 
-Quiz Battle Real-time - Sistema web de quiz competitivo em tempo real com multiplayer instantâneo.
+**FlasQ** - Sistema web de quiz competitivo em tempo real com multiplayer instantâneo.
+
+## Branding
+
+- **Nome:** FlasQ (Flash + Quiz)
+- **Logo:** Ícone "Q" estilizado com raio integrado, efeito neon laranja
+- **Arquivos de logo:** `src/assets/flasq-quadrado.png`, `src/assets/flasq-retangular.png`, `src/assets/flasq-fav.png`
+- **Favicon:** `public/favicon.png`
 
 ## Stack Tecnológica
 
@@ -120,6 +127,25 @@ ssh root@103.199.187.87 "cat /etc/easypanel/traefik/config/quiz.yaml"
 ```
 
 Se a config não existir, recriar conforme documentado em `DEPLOY.md` seção "Deploy Inicial", passo 8.
+
+---
+
+## Regra de Validação Obrigatória
+
+**IMPORTANTE:** Antes de declarar qualquer tarefa como concluída, SEMPRE:
+
+1. **Testar como usuário real usando Playwright** - Navegar pela aplicação e executar o fluxo completo
+2. **Tirar screenshots** durante o teste para confirmar que:
+   - A funcionalidade está funcionando corretamente
+   - Os elementos visuais estão no lugar correto
+   - Não há erros no console do navegador
+3. **Nunca dizer que algo está "resolvido" ou "pronto"** apenas porque o código foi alterado
+4. **Se um teste falhar**, investigar os logs, corrigir e testar novamente até funcionar
+
+Esta regra se aplica especialmente a:
+- Edge Functions do Supabase
+- Componentes de UI
+- Fluxos de usuário críticos (login, criação de sala, geração de perguntas, etc.)
 
 ---
 

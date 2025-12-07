@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import {
   ArrowLeft, Plus, Trash2, Edit2, Loader2, Sparkles,
-  CheckCircle, Filter, Search, FolderPlus, X
+  CheckCircle, Filter, Search, FolderPlus, X, Brain, Link2, Database
 } from 'lucide-react'
 import { Card, Button, Input } from '../../components/ui'
 import { supabase } from '../../lib/supabase'
@@ -29,10 +29,22 @@ interface NewQuestion {
   source_info: string
 }
 
+type SourceType = 'ai_knowledge' | 'url' | 'knowledge_base'
+
+interface KnowledgeSource {
+  id: string
+  name: string
+  status: string
+  total_chunks: number
+}
+
 interface AIGenerationConfig {
   category: string
   difficulty: Difficulty | 'mixed'
   count: number
+  sourceType: SourceType
+  sourceUrl: string
+  sourceId: string
 }
 
 interface NewCategory {
@@ -89,10 +101,14 @@ export default function ManageQuestions() {
   })
 
   const [newQuestion, setNewQuestion] = useState<NewQuestion>(getEmptyQuestion())
+  const [knowledgeSources, setKnowledgeSources] = useState<KnowledgeSource[]>([])
   const [aiConfig, setAIConfig] = useState<AIGenerationConfig>({
     category: 'Conhecimentos Gerais',
     difficulty: 'mixed',
-    count: 5
+    count: 5,
+    sourceType: 'ai_knowledge',
+    sourceUrl: '',
+    sourceId: ''
   })
 
   // Fetch questions and categories
@@ -111,6 +127,8 @@ export default function ManageQuestions() {
     await fetchCategories()
     // Then fetch questions
     await fetchQuestions()
+    // Fetch knowledge sources
+    await fetchKnowledgeSources()
     setLoading(false)
   }
 
@@ -134,6 +152,18 @@ export default function ManageQuestions() {
 
     if (!error && data) {
       setQuestions(data as Question[])
+    }
+  }
+
+  const fetchKnowledgeSources = async () => {
+    const { data, error } = await supabase
+      .from('knowledge_sources')
+      .select('id, name, status, total_chunks')
+      .eq('status', 'ready')
+      .order('name')
+
+    if (!error && data) {
+      setKnowledgeSources(data)
     }
   }
 
@@ -354,7 +384,10 @@ export default function ManageQuestions() {
           category: aiConfig.category,
           difficulty: aiConfig.difficulty,
           count: aiConfig.count,
-          existingQuestions: existingQuestionsInCategory // Enviar para a IA evitar
+          existingQuestions: existingQuestionsInCategory, // Enviar para a IA evitar
+          sourceType: aiConfig.sourceType,
+          sourceUrl: aiConfig.sourceType === 'url' ? aiConfig.sourceUrl : undefined,
+          sourceId: aiConfig.sourceType === 'knowledge_base' ? aiConfig.sourceId : undefined
         }
       })
 
@@ -540,6 +573,105 @@ export default function ManageQuestions() {
               </div>
 
               <div className="space-y-4">
+                {/* Source Type Selection */}
+                <div>
+                  <label className="block text-sm font-medium mb-2">Fonte do Conteúdo</label>
+                  <div className="grid grid-cols-3 gap-3">
+                    <button
+                      type="button"
+                      onClick={() => setAIConfig({ ...aiConfig, sourceType: 'ai_knowledge', sourceUrl: '', sourceId: '' })}
+                      className={`flex flex-col items-center gap-2 p-4 rounded-xl border-2 transition-all ${
+                        aiConfig.sourceType === 'ai_knowledge'
+                          ? 'border-primary bg-primary/10'
+                          : 'border-white/10 hover:border-white/20'
+                      }`}
+                    >
+                      <Brain className={`w-6 h-6 ${aiConfig.sourceType === 'ai_knowledge' ? 'text-primary' : 'text-text-muted'}`} />
+                      <div className="text-center">
+                        <p className="font-medium text-sm">IA</p>
+                        <p className="text-xs text-text-muted">Conhecimento próprio</p>
+                      </div>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setAIConfig({ ...aiConfig, sourceType: 'knowledge_base', sourceUrl: '' })}
+                      className={`flex flex-col items-center gap-2 p-4 rounded-xl border-2 transition-all ${
+                        aiConfig.sourceType === 'knowledge_base'
+                          ? 'border-purple-500 bg-purple-500/10'
+                          : 'border-white/10 hover:border-white/20'
+                      } ${knowledgeSources.length === 0 ? 'opacity-50 cursor-not-allowed' : ''}`}
+                      disabled={knowledgeSources.length === 0}
+                    >
+                      <Database className={`w-6 h-6 ${aiConfig.sourceType === 'knowledge_base' ? 'text-purple-500' : 'text-text-muted'}`} />
+                      <div className="text-center">
+                        <p className="font-medium text-sm">Base</p>
+                        <p className="text-xs text-text-muted">
+                          {knowledgeSources.length > 0 ? `${knowledgeSources.length} fonte(s)` : 'Sem fontes'}
+                        </p>
+                      </div>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setAIConfig({ ...aiConfig, sourceType: 'url', sourceId: '' })}
+                      className={`flex flex-col items-center gap-2 p-4 rounded-xl border-2 transition-all ${
+                        aiConfig.sourceType === 'url'
+                          ? 'border-secondary bg-secondary/10'
+                          : 'border-white/10 hover:border-white/20'
+                      }`}
+                    >
+                      <Link2 className={`w-6 h-6 ${aiConfig.sourceType === 'url' ? 'text-secondary' : 'text-text-muted'}`} />
+                      <div className="text-center">
+                        <p className="font-medium text-sm">URL</p>
+                        <p className="text-xs text-text-muted">Página web</p>
+                      </div>
+                    </button>
+                  </div>
+                </div>
+
+                {/* Knowledge Base Selection */}
+                {aiConfig.sourceType === 'knowledge_base' && (
+                  <div>
+                    <label className="block text-sm font-medium mb-2">
+                      Selecione a Fonte de Conhecimento
+                    </label>
+                    <select
+                      value={aiConfig.sourceId}
+                      onChange={(e) => setAIConfig({ ...aiConfig, sourceId: e.target.value })}
+                      className="w-full bg-surface border border-white/10 rounded-xl px-4 py-3 text-text-primary appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-purple-500/50"
+                      style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%239ca3af'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E")`, backgroundRepeat: 'no-repeat', backgroundPosition: 'right 12px center', backgroundSize: '20px' }}
+                    >
+                      <option value="" className="bg-surface text-text-primary">Selecione uma fonte...</option>
+                      {knowledgeSources.map(source => (
+                        <option key={source.id} value={source.id} className="bg-surface text-text-primary">
+                          {source.name} ({source.total_chunks} chunks)
+                        </option>
+                      ))}
+                    </select>
+                    <p className="text-xs text-text-muted mt-1">
+                      Perguntas serão geradas com base no conteúdo indexado desta fonte
+                    </p>
+                  </div>
+                )}
+
+                {/* URL Input (when URL source is selected) */}
+                {aiConfig.sourceType === 'url' && (
+                  <div>
+                    <label className="block text-sm font-medium mb-2">
+                      URL da Fonte
+                    </label>
+                    <Input
+                      type="url"
+                      value={aiConfig.sourceUrl}
+                      onChange={(e) => setAIConfig({ ...aiConfig, sourceUrl: e.target.value })}
+                      placeholder="https://exemplo.com/artigo"
+                      className="w-full"
+                    />
+                    <p className="text-xs text-text-muted mt-1">
+                      Cole o link do artigo, página ou documento de onde as perguntas serão extraídas
+                    </p>
+                  </div>
+                )}
+
                 {/* Category */}
                 <div>
                   <label className="block text-sm font-medium mb-2">Categoria</label>
@@ -616,6 +748,10 @@ export default function ManageQuestions() {
                 <Button
                   onClick={handleGenerateAI}
                   className="flex-1"
+                  disabled={
+                    (aiConfig.sourceType === 'url' && !aiConfig.sourceUrl.trim()) ||
+                    (aiConfig.sourceType === 'knowledge_base' && !aiConfig.sourceId)
+                  }
                 >
                   <Sparkles className="w-5 h-5" />
                   Gerar {aiConfig.count} Perguntas

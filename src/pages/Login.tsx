@@ -1,8 +1,9 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { Zap, ArrowLeft } from 'lucide-react'
+import { ArrowLeft } from 'lucide-react'
 import { Button, Input, Card } from '../components/ui'
 import { useAuth } from '../contexts/AuthContext'
+import logoQuadrado from '../assets/flasq-quadrado.png'
 
 export default function Login() {
   const [email, setEmail] = useState('')
@@ -40,8 +41,8 @@ export default function Login() {
         </Link>
 
         <Card>
-          <div className="flex items-center justify-center gap-2 mb-6">
-            <Zap className="w-8 h-8 text-primary" />
+          <div className="flex flex-col items-center justify-center gap-3 mb-6">
+            <img src={logoQuadrado} alt="FlasQ" className="w-16 h-16 rounded-xl" />
             <h1 className="text-2xl font-bold font-heading">Login do Host</h1>
           </div>
 

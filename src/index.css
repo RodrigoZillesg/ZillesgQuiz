@@ -1,10 +1,10 @@
 @import "tailwindcss";
 
 @theme {
-  /* Design System - Quiz Battle */
+  /* Design System - FlasQ */
 
-  /* Background */
-  --color-background: #0F172A;
+  /* Background - Combina com o fundo do logo FlasQ */
+  --color-background: #010D1A;
 
   /* Primary - Vibrant Tangerine */
   --color-primary: #FF6B35;
@@ -20,7 +20,7 @@
   --color-error: #EF4444;
 
   /* Surface */
-  --color-surface: #1E293B;
+  --color-surface: #162033;
 
   /* Text */
   --color-text-primary: #FFFFFF;

@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { Zap, RefreshCw } from 'lucide-react'
+import { RefreshCw } from 'lucide-react'
 import { Button, Input, Card } from '../../components/ui'
 import { supabase } from '../../lib/supabase'
 import { avatars, getAvatarsByCategory, getAvatarById, type Avatar } from '../../lib/utils'
 import { useAuth } from '../../contexts/AuthContext'
 import { getPlayerSession, savePlayerSession, clearPlayerSession, type PlayerSession } from '../../lib/session'
 import type { Room } from '../../types'
+import logoQuadrado from '../../assets/flasq-quadrado.png'
 
 export default function JoinRoom() {
   const { code } = useParams<{ code: string }>()
@@ -248,8 +249,8 @@ export default function JoinRoom() {
     <div className="min-h-screen flex items-center justify-center p-4">
       <Card className="w-full max-w-md">
         <div className="text-center mb-6">
-          <div className="flex items-center justify-center gap-2 mb-2">
-            <Zap className="w-6 h-6 text-primary" />
+          <div className="flex flex-col items-center gap-3 mb-4">
+            <img src={logoQuadrado} alt="FlasQ" className="w-12 h-12 rounded-lg" />
             <span className="text-2xl font-bold tracking-widest text-primary">{code}</span>
           </div>
           <p className="text-text-muted">Entre na sala para jogar</p>

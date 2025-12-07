@@ -1,8 +1,9 @@
 import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
-import { Zap, Users, Trophy, Clock, Sparkles, ArrowRight, Flame, Settings, LogIn } from 'lucide-react'
+import { Users, Trophy, Clock, Sparkles, ArrowRight, Flame, Settings, LogIn, Zap } from 'lucide-react'
 import { Button, Input, Card } from '../components/ui'
 import { useAuth } from '../contexts/AuthContext'
+import logoRetangular from '../assets/flasq-retangular.png'
 
 export default function Home() {
   const [showJoinModal, setShowJoinModal] = useState(false)
@@ -93,14 +94,12 @@ export default function Home() {
 
         <div className="text-center relative z-10">
           {/* Logo */}
-          <div className="flex items-center justify-center gap-3 mb-6 animate-pulse-slow">
-            <div className="relative">
-              <Zap className="w-16 h-16 text-primary" />
-              <div className="absolute inset-0 w-16 h-16 bg-primary/20 rounded-full blur-xl" />
-            </div>
-            <h1 className="text-5xl md:text-6xl font-bold font-heading bg-gradient-to-r from-primary via-secondary to-primary bg-clip-text text-transparent">
-              Quiz Battle
-            </h1>
+          <div className="flex items-center justify-center mb-8">
+            <img
+              src={logoRetangular}
+              alt="FlasQ"
+              className="h-20 md:h-24 w-auto"
+            />
           </div>
 
           <p className="text-xl md:text-2xl text-text-secondary mb-4">
